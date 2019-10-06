@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h1>Signup!</h1>
+
+{% if error %}
+{{ error }}
+<br />
+<br />
+{% endif %}
+
+<form method = "Post" action = "{%url 'signup'%} enctype ="multipart/form-data"">
+{% csrf_token %}
+
+First Name:
+<br/>
+<input type = "text" name = "fn"/>
+<br/>
+Last Name:
+<br/>
+<input type = "text" name = "ln"/>
+<br/>
+E-mail Address:
+<br/>
+<input type = "text" name = "email"/>
+<br/>
+Username:
+<br/>
+<input type = "text" name = "username"/>
+<br/>
+Password:
+<br/>
+<input type = "password" name = "password1"/>
+<br/>
+Confirm Password:
+<br />
+<input type = "password" name = "password2"/>
+<br />
+<br />
+Upload an Image:
+<input type = "file" name = "image"/>
+<br/>
+
+
+<br />
+<input class = "btn btn-primary" type = "submit" value = "Sign Up!"/>
+</form>
+
+
+{% endblock %}

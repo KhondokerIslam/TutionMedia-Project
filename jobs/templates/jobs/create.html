@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h1>Create</h1>
+
+{% if error %}
+{{ error }}
+<br />
+<br />
+{% endif %}
+
+
+<form method = "Post" action = "{%url 'create'%}" enctype ="multipart/form-data" >
+        {% csrf_token %}
+        Class:
+        <select name = "Class" >
+            {% for classes in grade %}
+            <option value="{{classes}}">{{classes}}</option>
+            {% endfor %}
+        </select>
+        <br/>
+        <br/>
+        Subject:
+        <select name = "Subject" >
+            {% for subs in subjects %}
+            <option value="{{subs}}">{{subs}}</option>
+            {% endfor %}
+        </select>
+        <br/>
+        <br/>
+        Location:
+        <input type = "text" name = "location" />
+        <br />
+        <br/>
+        Days:
+        <select name = "days" >
+            {% for day in days %}
+            <option value="{{day}}">{{day}}</option>
+            {% endfor %}
+        </select>
+        <br/>
+        <br/>
+        Salary (in Thousands):
+          <input type = "text" name = "Salary" />
+          <br/>
+          <br/>
+        URL:
+        <input type = "text" name = "url" />
+        <br/>
+        <br/>
+        <input class = "btn btn-primary" type = "submit" value = "Add tution"/>
+</form>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+
+    {% block content %}
+
+    {% for job in Job.all %}
+
+    <div class = "row">
+        <div class = "col-2">
+      <p> Class: {{job.Class}}</p>
+      </div>
+
+      <div class = "col-2">
+      <p> Subject: {{job.Subject}}</p>
+      </div>
+
+      <div class = "col-2">
+      <p>Location: {{job.Location}}</p>
+      </div>
+
+      <div class = "col-2">
+          <p>Days: {{job.Days}} days/week</p>
+        </div>
+        <div class = "col-2">
+        <p>Salary: {{job.Salary}}k</p>
+          </div>
+
+          <div class = "col-2">
+            <a href = "javasript:{document.getElementById('upvote').submit()}"><button class = "btn btn-primary btn-lg btn-block">Like {{ job.interested_total}}</button> </a>
+          </div>
+        </div>
+    <br/>
+
+
+    {% endfor %}
+
+
+    {% if user.is_authenticated %}
+
+
+
+
+    {% endif %}
+    {% endblock %}
