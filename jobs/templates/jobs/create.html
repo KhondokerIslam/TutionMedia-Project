@@ -2,8 +2,8 @@
 
 
 {% block content %}
+<div class="container pt-2"><h2><center>Create Your Profile</center></h2></div>
 
-<h1>Create</h1>
 
 {% if error %}
 {{ error }}
@@ -11,46 +11,67 @@
 <br />
 {% endif %}
 
-
-<form method = "Post" action = "{%url 'create'%}" enctype ="multipart/form-data" >
+<div class="container pt-5 pl-5">
+    
+    <form method = "Post" action = "{%url 'create'%}" enctype ="multipart/form-data" >
         {% csrf_token %}
-        Class:
-        <select name = "Class" >
-            {% for classes in grade %}
-            <option value="{{classes}}">{{classes}}</option>
-            {% endfor %}
-        </select>
-        <br/>
-        <br/>
-        Subject:
-        <select name = "Subject" >
-            {% for subs in subjects %}
-            <option value="{{subs}}">{{subs}}</option>
-            {% endfor %}
-        </select>
-        <br/>
-        <br/>
-        Location:
-        <input type = "text" name = "location" />
-        <br />
-        <br/>
-        Days:
-        <select name = "days" >
-            {% for day in days %}
-            <option value="{{day}}">{{day}}</option>
-            {% endfor %}
-        </select>
-        <br/>
-        <br/>
-        Salary (in Thousands):
-          <input type = "text" name = "Salary" />
-          <br/>
-          <br/>
-        URL:
-        <input type = "text" name = "url" />
-        <br/>
-        <br/>
-        <input class = "btn btn-primary" type = "submit" value = "Add tution"/>
-</form>
+        <div class="row justify-content-md-center">
+            <div class="col-4"><label><b>Personal Informations:</b></label></div>
+        </div>
+        <br>
+        <div class="row justify-content-md-center">
+            <div class="col-4"><label><b>Tutors Preferences:</b></label></div>
+        </div>
+        <br>
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Class :</label></div>
+            <div class="col-md-8">
+                <select class="custom-select" style="width:550px;" name = "class" >
+                    {% for classes in grade %}
+                    <option value="{{classes}}">{{classes}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group row justify-content-md-center">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Subject :  </label></div>
+            <div class="col-md-8">
+                <select class="custom-select" style="width:550px;" name = "subject">
+                    {% for subs in subjects %}
+                    <option value="{{subs}}">{{subs}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Location :</label> </div>
+            <div class="col-md-8"><input type = "text" class="" name = "location" style="width:550px;"/></div>
+        </div>
+
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Days :</label></div>
+            <div class="col-md-8">
+                <select class="custom-select" style="width:550px;" name = "days">
+                    {% for day in days %}
+                    <option value="{{day}}">{{day}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Salary :</label> </div>
+            <div class="col-md-8"><input type = "text" class="" name = "salary" style="width:550px;"/></div>
+        </div>
+
+    </form>
+</div>
 
 {% endblock %}
