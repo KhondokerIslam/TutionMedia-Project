@@ -1,9 +1,41 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 {% block content %}
-<div class="container pt-2"><h2><center>Create Your Profile</center></h2></div>
+<header>
 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static '/images/logo.png' %}" class="d-inline-block align-top" height=30 width=30>
+                Tution Media</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-item nav-link active" href="{% url 'create' %}">Create</a>
+                    <a class="nav-item nav-link" href="{{user.id}}">Profile</a>
+                    <a class="nav-item nav-link"
+                        href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                    <form method="POST" action="{% url 'logout' %}" id="logout">
+                        {% csrf_token %}
+                        <input type="hidden" />
+                    </form>
+                    {% else %}
+                    <a class="nav-item nav-link" href="{% url 'signup' %}">Sign up</a>
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</header>
 
 {% if error %}
 {{ error }}
@@ -11,53 +43,154 @@
 <br />
 {% endif %}
 
-<div class="container pt-5 pl-5">
-    
-    <form method = "Post" action = "{%url 'create'%}" enctype ="multipart/form-data" >
+<div class="container pt-2 text-secondary">
+    <h2>
+        <center>Create Your Profile</center>
+    </h2>
+</div>
+<div class="container pt-5 pl-5 bg-light rounded">
+
+    <form method="POST" action="{%url 'create'%}" enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="row justify-content-md-center">
-            <div class="col-4"><label><b>Personal Informations:</b></label></div>
-        </div>
-        <br>
-        <div class="row justify-content-md-center">
-            <div class="col-4"><label><b>Tutors Preferences:</b></label></div>
-        </div>
-        <br>
+
+        <!-- ------------------------- Personal Informations ----------------------- -->
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8 text-light bg-secondary rounded"><label>Personal Informations :</label></div>
+        </div><br>
+
+        <!-- Profile Picture-->
         <div class="row justify-content-md-center form-group">
             <div class="col-2"></div>
-            <div class="col-2"><label>Class :</label></div>
+            <div class="col-2"><label>Profile Picture :</label> </div>
             <div class="col-md-8">
-                <select class="custom-select" style="width:550px;" name = "class" >
+                <img src="{% static '/images/propic avater.jpg' %}" width="64" height="64" alt=""
+                    class="default avatar" />
+                <br><br><input type="file" name="propic" id="propic" required>
+            </div>
+        </div>
+
+        <!-- Gender -->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Gender :</label></div>
+            <div class="col-md-8">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="male" value="male" required>
+                    <label class="form-check-label" for="male">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                    <label class="form-check-label" for="female">Female</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phone Number-->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Phone Number :</label> </div>
+            <div class="col-md-8"><input type="text" class="form-control" name="phone" style="width:450px;" required />
+            </div>
+        </div>
+
+        <!-- Date of Birth-->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Date of Birth :</label> </div>
+            <div class="well col-md-8">
+                <div><input class="form-control" type="date" id="birthdate" name="birthdate" style="width:450px;"
+                        required></div>
+            </div>
+        </div>
+
+        <!-- Present Address-->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Present Address :</label> </div>
+            <div class="col-md-8"><input type="text" class="form-control" name="address" style="width:450px;" required>
+            </div>
+        </div>
+
+        <!-- Religion-->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Religion :</label> </div>
+            <div class="col-md-8"><input type="text" class="form-control" name="religion" style="width:450px;" required>
+            </div>
+        </div>
+
+
+        <!-- ------------------------- Tutors Preference ----------------------- -->
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8 text-light bg-secondary rounded"><label>Tutors Preferences :</label></div>
+        </div><br>
+        <!-- Class Catagory -->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Class Catagory :</label></div>
+            <div class="col-md-8">
+                <select style="width:550px;" name="class" id="classmultiselect" multiple="multiple" required>
+                    <option selected="selected" disabled="disabled">Select Class (Required)</option>
+                    <option value="PR">Primary (1-5)</option>
+                    <option value="JU">Junior (6-8)</option>
+                    <option value="SSC">Scondary (9-10)</option>
+                    <option value="HSC">Higher Secondary (11-12)</option>
+                </select>
+                <!-- <p class="alert alert-primary" role="alert" style="hight:10px; width:450px;">You can select multiple class catagory</p> -->
+            </div>
+            <!-- <div class="col-md-8 form-group">
+                <select class="custom-select" style="width:550px;" name = "class">
                     {% for classes in grade %}
                     <option value="{{classes}}">{{classes}}</option>
                     {% endfor %}
                 </select>
-            </div>
+            </div> -->
         </div>
-        
+
+        <!-- Subjects -->
         <div class="form-group row justify-content-md-center">
             <div class="col-2"></div>
-            <div class="col-2"><label>Subject :  </label></div>
-            <div class="col-md-8">
-                <select class="custom-select" style="width:550px;" name = "subject">
-                    {% for subs in subjects %}
-                    <option value="{{subs}}">{{subs}}</option>
+            <div class="col-2"><label>Subject : </label></div>
+            <div class="col-md-8 form-group">
+                <select style="width:550px;" name="subject" id="subjectmultiselect" multiple="multiple" required>
+                    <option selected="selected" disabled="disabled">Select Subjects (Required)</option>
+                    {% for sub_id, sub in subjects.items %}
+                    <option value="{{sub_id}}">{{sub}}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
 
+        <!-- Medium -->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Medium :</label></div>
+            <div class="col-md-8">
+                <select style="width:550px;" name="medium" id="mediummultiselect" multiple="multiple" required>
+                    <option selected="selected" disabled="disabled">Select Medium (Required)</option>
+                    <option value="BM">Bangla Medium</option>
+                    <option value="EM">English Medium</option>
+                    <option value="EV">English Version(National Curriculam)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Location -->
         <div class="row justify-content-md-center form-group">
             <div class="col-2"></div>
             <div class="col-2"><label>Location :</label> </div>
-            <div class="col-md-8"><input type = "text" class="" name = "location" style="width:550px;"/></div>
+            <div class="col-md-8"><input type="text" class="form-control" name="location" style="width:450px;" required>
+            </div>
         </div>
 
+        <!-- Days -->
         <div class="row justify-content-md-center form-group">
             <div class="col-2"></div>
             <div class="col-2"><label>Days :</label></div>
             <div class="col-md-8">
-                <select class="custom-select" style="width:550px;" name = "days">
+                <select class="custom-select" style="width:450px;" name="days" required>
                     {% for day in days %}
                     <option value="{{day}}">{{day}}</option>
                     {% endfor %}
@@ -65,12 +198,76 @@
             </div>
         </div>
 
+        <!-- Tution Type -->
+        <div class="form-group row justify-content-md-center">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Tuition Type : </label></div>
+            <div class="col-md-8 form-group">
+                <select style="width:450px;" name="tutiontype" class="custom-select" required>
+                    <option value="PR">Private</option>
+                    <option value="BC">Batch</option>
+                    <option value="PB">Both (Private and Batch)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Salary -->
         <div class="row justify-content-md-center form-group">
             <div class="col-2"></div>
             <div class="col-2"><label>Salary :</label> </div>
-            <div class="col-md-8"><input type = "text" class="" name = "salary" style="width:550px;"/></div>
+            <div class="col-md-8"><input type="text" class="form-control" name="salary" style="width:450px;" required>
+            </div>
         </div>
 
+
+        <!-- ------------------------- Academic Informations ----------------------- -->
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-8 text-light bg-secondary rounded"><label>Academic Informations :</label></div>
+        </div><br>
+
+        <!-- Current Institution -->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Current Institution :</label> </div>
+            <div class="col-md-8"><input type="text" class="form-control" name="institution" style="width:450px;"
+                    required></div>
+        </div>
+
+        <!-- Name of Degree -->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Name of Degree :</label> </div>
+            <div class="col-md-8"><input type="text" class="form-control" name="degree" style="width:450px;" required>
+            </div>
+        </div>
+
+        <!-- Subject -->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Subject :</label> </div>
+            <div class="col-md-8"><input type="text" class="form-control" name="mysubject" style="width:450px;"
+                    required></div>
+        </div>
+
+        <!-- Registration Number -->
+        <div class="row justify-content-md-center form-group">
+            <div class="col-2"></div>
+            <div class="col-2"><label>Your institutional ID/registration number :</label> </div>
+            <div class="col-md-8"><input type="text" class="form-control" name="regno" style="width:450px;" required>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center form-group">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="terms" id="terms" />
+                To complete registration, you must read and agree to our <a href="#">terms and conditions</a>.
+            </label>
+        </div>
+
+        <div class="row justify-content-md-center form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
     </form>
 </div>
 

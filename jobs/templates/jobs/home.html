@@ -1,44 +1,76 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<header>
 
-
-    {% block content %}
-
-    {% for job in Job.all %}
-
-    <div class = "row">
-        <div class = "col-2">
-      <p> Class: {{job.Class}}</p>
-      </div>
-
-      <div class = "col-2">
-      <p> Subject: {{job.Subject}}</p>
-      </div>
-
-      <div class = "col-2">
-      <p>Location: {{job.Location}}</p>
-      </div>
-
-      <div class = "col-2">
-          <p>Days: {{job.Days}} days/week</p>
-        </div>
-        <div class = "col-2">
-        <p>Salary: {{job.Salary}}k</p>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+          <a class="navbar-brand" href="{% url 'home' %}">
+              <img src="{% static '/images/logo.png' %}" class="d-inline-block align-top" height=30 width=30>
+              Tution Media</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+              aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+              <div class="navbar-nav ml-auto">
+                  {% if user.is_authenticated %}
+                  <a class="nav-item nav-link active" href="{% url 'home' %}">Home</a>
+                  <a class="nav-item nav-link" href="{% url 'create' %}">Create</a>
+                  <a class="nav-item nav-link" href="{{user.id}}">Profile</a>
+                  <a class="nav-item nav-link"
+                      href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                  <form method="POST" action="{% url 'logout' %}" id="logout">
+                      {% csrf_token %}
+                      <input type="hidden" />
+                  </form>
+                  {% else %}
+                  <a class="nav-item nav-link" href="{% url 'signup' %}">Sign up</a>
+                  <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                  {% endif %}
+              </div>
           </div>
+      </div>
+  </nav>
 
-          <div class = "col-2">
-            <a href = "javasript:{document.getElementById('upvote').submit()}"><button class = "btn btn-primary btn-lg btn-block">Like {{ job.interested_total}}</button> </a>
-          </div>
-        </div>
-    <br/>
+</header>
+{% for job in Job.all %}
+
+<div class="row">
+  <div class="col-2">
+    <p> Class: {{job.Class}}</p>
+  </div>
+
+  <div class="col-2">
+    <p> Subject: {{job.Subject}}</p>
+  </div>
+
+  <div class="col-2">
+    <p>Location: {{job.Location}}</p>
+  </div>
+
+  <div class="col-2">
+    <p>Days: {{job.Days}} days/week</p>
+  </div>
+  <div class="col-2">
+    <p>Salary: {{job.Salary}}k</p>
+  </div>
+
+  <div class="col-2">
+    <a href="javasript:{document.getElementById('upvote').submit()}"><button
+        class="btn btn-primary btn-lg btn-block">Like {{ job.interested_total}}</button> </a>
+  </div>
+</div>
+<br />
 
 
-    {% endfor %}
+{% endfor %}
 
 
-    {% if user.is_authenticated %}
+{% if user.is_authenticated %}
+<h1>Hello</h1>
 
 
 
-
-    {% endif %}
-    {% endblock %}
+{% endif %}
+{% endblock %}
