@@ -2,10 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Job
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 def home(request):
-    
-    return render(request, 'jobs/home.html')
+    subjects = {'M':'Math', 'E':'English', 'B':'Biology', 'P':'Physics', 'C':'Chemistry', 'I':'ICT', 
+                'BN':'Bangla', 'CM':'Computer'}
+    days = [1,2,3,4,5,6,7]
+    return render(request, 'jobs/home.html', {'subjects':subjects,'days':days} )
+
 
 @login_required
 def create(request):
@@ -46,3 +50,60 @@ def create(request):
                     'BN':'Bangla', 'CM':'Computer'}
         days = [1,2,3,4,5,6,7]
         return render(request, 'jobs/create.html', {'subjects':subjects,'days':days} )
+
+
+def search(request):
+    if request.method == 'POST':
+        _class, name, tution_type, gender, medium, subjects, institution = ('',)*7
+
+        if request.POST['class']:
+            _class = request.POST['class']
+        if request.POST['name']:
+            name = request.POS['name']
+        if request.POST.get('tutiontype'):
+            tution_type = request.POST.get('tutiontype')
+        if request.POST.get('gender'):
+            gender = request.POST.get('gender')
+
+        # I have to convert 'medium' and 'subject' from list to string
+        # Because in database it is stored as a string
+        if request.POST.getlist('medium'):
+            mediums = request.POST.getlist('medium')
+            medium_len = len(mediums)
+            medium = ''
+            for i in range(0, medium_len - 1):
+                medium += mediums[i] + ','
+            medium += mediums[medium_len - 1]
+        if request.POST.getlist('subject'):
+            subjects = request.POST.getlist('subject')
+            sub_len = len(subjects)
+            subject = ''
+            for i in range(0, sub_len - 1):
+                subject += subjects[i] + ','
+            subject += subjects[sub_len - 1]
+        if request.POST['institution']:
+            institution = request.POST['institution']
+        
+        # Got a set of profile object
+        profiles = Job.objects.all().filter(
+            Class__icontains = _class
+            ).filter(
+                Gender__icontains = gender
+                ).filter(
+                    Tution_Type__icontains = tution_type
+                    ).filter(
+                        Subject__icontains = subject
+                        ).filter(
+                            Medium__icontains = medium
+                        )
+        # Iterate over all the profile object and make tutor id list
+        # to get Tutor objects for all the profiles
+        tutor_id = []
+        for profile in profiles:
+            tutor_id.append(profile.Tutor_id)
+
+        tutors = User.objects.all().filter(pk__in = tutor_id)
+
+        # For multiple variable iterate
+        zippedList = zip(profiles, tutors)
+        return render(request, 'jobs/search.html', {'profiles':profiles, 'tutors':tutors, 'zippedlist':zippedList} )
