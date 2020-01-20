@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from multiselectfield import MultiSelectField
 from datetime import date
+# For Star Rating
+from djangoratings.fields import RatingField
+from django import forms
 
 class Job(models.Model):
 
@@ -54,4 +57,5 @@ class Job(models.Model):
     MySubject = models.CharField(default='', max_length = 100)
     Registration = models.CharField(default='', max_length = 30)
     Vote = models.IntegerField(default=0)
+    rating = RatingField(range=5, can_change_vote = False, allow_anonymous = True, use_cookies = True)
 

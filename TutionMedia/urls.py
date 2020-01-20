@@ -27,4 +27,5 @@ urlpatterns = [
     path('<int:Tutor_id>/', profil.views.profil, name ='profil' ),
     path('create', jobs.views.create, name = 'create'),
     path('search', jobs.views.search, name = 'search'),
+    # url(r'^ratings/', include('star_ratings.urls', namespace='ratings', app_name='ratings')),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

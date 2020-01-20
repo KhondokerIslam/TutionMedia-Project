@@ -54,16 +54,22 @@ def create(request):
 
 def search(request):
     if request.method == 'POST':
-        _class, name, tution_type, gender, medium, subjects, institution = ('',)*7
+        _class, name, tution_type, gender, subject, medium, institution = ('',)*7
 
-        if request.POST['class']:
-            _class = request.POST['class']
+        if request.POST.get('class'):
+            _class = request.POST.get('class')
+            if(_class == 'EMNI'): 
+                _class = ''
         if request.POST['name']:
             name = request.POS['name']
         if request.POST.get('tutiontype'):
             tution_type = request.POST.get('tutiontype')
+            if(tution_type == 'EMNI'): 
+                tution_type = ''
         if request.POST.get('gender'):
             gender = request.POST.get('gender')
+            if(gender == 'EMNI'): 
+                gender = ''
 
         # I have to convert 'medium' and 'subject' from list to string
         # Because in database it is stored as a string
@@ -95,15 +101,27 @@ def search(request):
                         Subject__icontains = subject
                         ).filter(
                             Medium__icontains = medium
-                        )
+                        ).filter(
+                            Institution__icontains = institution
+                        ).order_by('Tutor_id')
+
         # Iterate over all the profile object and make tutor id list
         # to get Tutor objects for all the profiles
         tutor_id = []
         for profile in profiles:
             tutor_id.append(profile.Tutor_id)
 
-        tutors = User.objects.all().filter(pk__in = tutor_id)
+        tutors = User.objects.all().filter(pk__in = tutor_id).order_by('id')
 
         # For multiple variable iterate
         zippedList = zip(profiles, tutors)
-        return render(request, 'jobs/search.html', {'profiles':profiles, 'tutors':tutors, 'zippedlist':zippedList} )
+        return render(request, 'jobs/search2.html', {'profiles':profiles, 'tutors':tutors, 'zippedlist':zippedList} )
+
+
+def RateList(request):
+    queryset = Job.objects.filter(ratings__isnull=False).order_by('ratings__average')
+    context= {
+        "object_list": queryset,
+        "title": "List"
+    }
+    return render(request, 'jobs/index.html', context)

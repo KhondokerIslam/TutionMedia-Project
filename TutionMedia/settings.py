@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'multiselectfield',
     'django_filters',
+    'djangoratings',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,7 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+# For Star Rating
+STAR_RATINGS_RERATE = False
+STAR_RATINGS_ANONYMOUS = True
