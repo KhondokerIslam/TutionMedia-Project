@@ -11,9 +11,16 @@ def signup(request):
                 user = User.objects.get(username=request.POST['username'])
                 return render(request,'account/signup.html',{'error': 'Username already taken!'} )
             except User.DoesNotExist:
-                user = User.objects.create_user(request.POST['username'],request.POST['email'], password = request.POST['password1'],first_name = request.POST['fn'],last_name = request.POST['ln']  )
-                auth.login(request,user)
-                return redirect('home')
+                try:
+                    user = User.objects.get(email=request.POST['email'])
+                    return render(request,'account/signup.html',{'error': 'Email already taken!'} )
+                except User.DoesNotExist:
+                    user = User.objects.create_user(request.POST['username'],request.POST['email'], password = request.POST['password1'],first_name = request.POST['firstname'],last_name = request.POST['lastname']  )
+                    auth.login(request,user)
+                    subjects = {'M':'Math', 'E':'English', 'B':'Biology', 'P':'Physics', 'C':'Chemistry', 'I':'ICT', 
+                                'BN':'Bangla', 'CM':'Computer'}
+                    days = [1,2,3,4,5,6,7]
+                    return render(request, 'jobs/create.html', {'subjects':subjects,'days':days} )
         else:
             return render(request, 'account/signup.html', {'error': 'Password Does not match!'} )
     else:

@@ -1,52 +1,89 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block content %}
+<header>
 
-<h1>Signup!</h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static '/images/logo.png' %}" class="d-inline-block align-top" height=30 width=30>
+                Tution Media</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav ml-auto">
+                    {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-item nav-link active-page" href="{% url 'create' %}">Create</a>
+                    <a class="nav-item nav-link" href="{{user.id}}">Profile</a>
+                    <a class="nav-item nav-link"
+                        href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+                    <form method="POST" action="{% url 'logout' %}" id="logout">
+                        {% csrf_token %}
+                        <input type="hidden" />
+                    </form>
+                    {% else %}
+                    <a class="nav-item nav-link active" href="{% url 'signup' %}">Sign up</a>
+                    <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+</header>
 
 {% if error %}
 {{ error }}
 <br />
 <br />
 {% endif %}
+<div class="container pt-5">
+    <h1>Signup!</h1>
+    <form method = "POST" action = "{%url 'signup'%}">
+        {% csrf_token %}
 
-<form method = "Post" action = "{%url 'signup'%} enctype ="multipart/form-data"">
-{% csrf_token %}
+        <div class="form-group required">
+            <label class="control-label" for="exampleInputEmail1">First Name  </label>
+            <input type="text" class="form-control" name="firstname" placeholder="First Name" required="required">
+        </div>
 
-First Name:
-<br/>
-<input type = "text" name = "fn"/>
-<br/>
-Last Name:
-<br/>
-<input type = "text" name = "ln"/>
-<br/>
-E-mail Address:
-<br/>
-<input type = "text" name = "email"/>
-<br/>
-Username:
-<br/>
-<input type = "text" name = "username"/>
-<br/>
-Password:
-<br/>
-<input type = "password" name = "password1"/>
-<br/>
-Confirm Password:
-<br />
-<input type = "password" name = "password2"/>
-<br />
-<br />
-Upload an Image:
-<input type = "file" name = "image"/>
-<br/>
+        <div class="form-group required">
+            <label class="control-label" for="exampleInputEmail1">Last Name  </label>
+            <input type="text" class="form-control" name="lastname" placeholder="Last Name" required="required">
+        </div>
 
+        <div class="form-group required">
+            <label class="control-label" for="exampleInputEmail1">User Name</label>
+            <input type="text" class="form-control" name="username" placeholder="User Name" required="required">
+        </div>
 
-<br />
-<input class = "btn btn-primary" type = "submit" value = "Sign Up!"/>
-</form>
+        <div class="form-group required">
+            <label class="control-label" for="exampleInputEmail1">Email address</label>
+            <input type="email" class="form-control" name="email" aria-describedby="emailHelp" placeholder="Enter email" required="required">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
 
+        <div class="form-group required">
+            <label class="control-label" for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" name="password1" placeholder="Password" required="required">
+        </div>
+
+        <div class="form-group required">
+            <label class="control-label" for="exampleInputPassword1">Confirm Password</label>
+            <input type="password" class="form-control" name="password2" placeholder="Confirm Password" required="required">
+        </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Check me out</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 
 {% endblock %}

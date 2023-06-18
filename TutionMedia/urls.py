@@ -17,12 +17,15 @@ from django.contrib import admin
 from django.urls import path , include
 import jobs.views
 import profil.views
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', jobs.views.home, name= 'home' ),
     path('account/', include('account.urls')),
-    path('profil/', profil.views.profil, name ='profil' ),
-    path('jobs/', include('jobs.urls')),
-]
+    path('<int:Tutor_id>/', profil.views.profil, name ='profil' ),
+    path('create', jobs.views.create, name = 'create'),
+    path('search', jobs.views.search, name = 'search'),
+    # url(r'^ratings/', include('star_ratings.urls', namespace='ratings', app_name='ratings')),
+] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
